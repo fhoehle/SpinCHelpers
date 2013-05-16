@@ -1,12 +1,13 @@
 import ROOT
 #
 ## internal function to determine site 
-def inputPath()
+def inputPath():
   import os
   if '/opt__sbg__data__safe1' in os.getcwd():
     return '/opt/sbg/data/safe1/cms/fhoehle/MyIPHC_Unfolding/UnfoldingIPHC/inputs/'
 ##
 def deltaPhiBackgroundHistScaled():
+  ROOT.TH1.AddDirectory(False)
   bgFile = ROOT.TFile(inputPath()+"/selected_Data_BG.root");
   backHistNames = [["DeltaPhiLLept_mumu_afterbtag1_TTbarBkg","DeltaPhiLLept_mumu_afterbtag1_DYToLL_M10-50","DeltaPhiLLept_mumu_afterbtag1_Zjets",
   	"DeltaPhiLLept_mumu_afterbtag1_Wjets","DeltaPhiLLept_mumu_afterbtag1_TtW","DeltaPhiLLept_mumu_afterbtag1_TbartW","DeltaPhiLLept_mumu_afterbtag1_WZ",
@@ -30,11 +31,14 @@ def deltaPhiBackgroundHistScaled():
   ## ee
   for bkg in backHistNames[2]:
     bckgHist_ee.Add(bgFile.Get(bkg))
-  print "mumu bkg ",bckgHist_mumu.Integral(); print "emu bkg ",bckgHist_emu.Integral(); print "ee bkg ",bckgHist_ee.Integral()
+  #print "mumu bkg ",bckgHist_mumu.Integral(); print "emu bkg ",bckgHist_emu.Integral(); print "ee bkg ",bckgHist_ee.Integral()
   bckgHist = bckgHist_mumu.Clone("deltaPhiBkg"); bckgHist.Reset("ICE")
   bckgHist.Add(bckgHist_mumu);bckgHist.Add(bckgHist_emu);bckgHist.Add(bckgHist_ee)
+  #print "bckgHist ",bckgHist, " ",bckgHist.Integral()
   return bckgHist
+#########################
 def deltaPhiSignalHistScaled():
+  ROOT.TH1.AddDirectory(False)
   signalFile = ROOT.TFile(inputPath()+'/selected_Data_BG.root')
   signalHistmumu = signalFile.Get("DeltaPhiLLept_mumu_afterbtag1_TTbarSig").Clone("DeltaPhiLLept_mumu_afterbtag1_TTbarSig");
   signalHistmumu.Sumw2();signalHistmumu.Scale(1.0/signalHistmumu.Integral())
