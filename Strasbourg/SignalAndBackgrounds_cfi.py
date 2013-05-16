@@ -37,6 +37,9 @@ def deltaPhiBackgroundHistScaled():
   #print "bckgHist ",bckgHist, " ",bckgHist.Integral()
   return bckgHist
 #########################
+factorSignal_mumu = 1880.16
+factorSignal_emu = 5654.72
+factorSignal_ee = 1503.76
 def deltaPhiSignalHistScaled():
   ROOT.TH1.AddDirectory(False)
   signalFile = ROOT.TFile(inputPath()+'/selected_Data_BG.root')
@@ -47,7 +50,7 @@ def deltaPhiSignalHistScaled():
   signalHistee = signalFile.Get("DeltaPhiLLept_emu_afterbtag1_TTbarSig").Clone("DeltaPhiLLept_emu_afterbtag1_TTbarSig");
   signalHistee.Sumw2();signalHistee.Scale(1.0/signalHistee.Integral())
   signalDeltaPhi = signalHistmumu.Clone("signalDeltaPhi");signalDeltaPhi.Reset("ICE");
-  signalDeltaPhi.Add(signalHistmumu,1880.16);
-  signalDeltaPhi.Add(signalHistemu,5654.72);
-  signalDeltaPhi.Add(signalHistee,1503.76);
+  signalDeltaPhi.Add(signalHistmumu,factorSignal_mumu);
+  signalDeltaPhi.Add(signalHistemu,factorSignal_emu);
+  signalDeltaPhi.Add(signalHistee,factorSignal_ee);
   return signalDeltaPhi
